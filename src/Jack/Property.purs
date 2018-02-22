@@ -8,6 +8,7 @@ module Jack.Property (
   , unProperty
   , property
   , propertyM
+  , resultM
 
   , check
   , check'
@@ -117,13 +118,16 @@ property b =
   else
     mkProperty <<< pure $ Failure List.Nil
 
-propertyM :: forall m. Monad m => Applicative m => m Boolean -> Property' m
+propertyM :: forall m. Monad m => m Boolean -> Property' m
 propertyM mb =
-  mkProperty' $ pure $ do
+  resultM $ do
     b <- mb
     if b
       then pure Success
       else pure $ Failure List.Nil
+
+resultM :: forall m. m Result -> Property' m
+resultM = mkProperty' <<< pure
 
 counterexample :: forall m. Functor m => String -> Property' m -> Property' m
 counterexample msg =
