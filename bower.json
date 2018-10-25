@@ -21,12 +21,13 @@
   "dependencies": {
     "purescript-prelude": "^4.0.0",
     "purescript-foldable-traversable": "^4.0.0",
-    "purescript-int-53": "#146cfd80af7eef0a6d7970a9d8001a89f96c9646",
+    "purescript-int-53": "zyla/purescript-int-53#master",
     "purescript-lists": "^5.0.0",
     "purescript-arrays": "^5.0.0",
     "purescript-ordered-collections": "^1.4.0",
     "purescript-console": "^4.0.0",
-    "purescript-random": "^4.0.0"
+    "purescript-random": "^4.0.0",
+    "purescript-foreign-object": "^1.0.0"
   },
   "devDependencies": {
     "purescript-psci-support": "^4.0.0"

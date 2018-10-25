@@ -25,8 +25,9 @@ module Jack.Combinators (
   , suchThatMaybe
   ) where
 
-import Control.Monad.Rec.Class (Step(..), tailRecM2)
+import Prelude
 
+import Control.Monad.Rec.Class (Step(..), tailRecM2)
 import Data.Array as Array
 import Data.Char (toCharCode, fromCharCode)
 import Data.Foldable (sum)
@@ -36,16 +37,13 @@ import Data.List.Lazy as Lazy
 import Data.Maybe (Maybe(..), isJust)
 import Data.NonEmpty (NonEmpty(..))
 import Data.Tuple (Tuple(..), fst)
-
 import Jack.Gen (Gen(..), runGen, mkGen, mapTree, mapRandom)
 import Jack.Random (Random, replicateRecM)
 import Jack.Random as Random
 import Jack.Shrink (shrinkTowards, sequenceShrinkList, sequenceShrinkOne)
 import Jack.Tree (Tree(..), outcome, filterTree)
-
+import Partial.Unsafe (unsafeCrashWith)
 import Partial.Unsafe as Savage
-
-import Prelude
 
 
 -- | Prevent a 'Gen' from shrinking.
@@ -75,8 +73,11 @@ scale f j =
 -- | Generates a 'Char' in the given range.
 chooseChar :: Char -> Char -> Gen Char
 chooseChar x0 x1 =
-  map fromCharCode $
-    chooseInt (toCharCode x0) (toCharCode x1)
+  chooseInt (toCharCode x0) (toCharCode x1) <#> \n ->
+    case fromCharCode n of
+      Nothing -> unsafeCrashWith $ "Generating char between " <> show x0
+        <> " and " <> show x1 <> " generated invalid char code: " <> show n
+      Just x -> x
 
 -- | Generates an integral number.
 chooseInt :: Int -> Int -> Gen Int

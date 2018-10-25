@@ -19,8 +19,8 @@ module Jack.Seed (
   , splitSeed
   ) where
 
-import Control.Monad.Eff (Eff)
-import Control.Monad.Eff.Random (RANDOM, randomInt)
+import Effect (Effect)
+import Effect.Random (randomInt)
 
 import Data.Int.Bits ((.&.))
 import Data.Int53 (Int53)
@@ -56,7 +56,7 @@ mkSeed s0 =
     Seed (s1 + 1) (s2 + 1)
 
 -- | Create a random 'Seed' using the system random number generator.
-randomSeed :: forall e. Eff ("random" :: RANDOM | e) Seed
+randomSeed :: Effect Seed
 randomSeed =
   mkSeed <$> randomInt bottom top
 
